@@ -13,15 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('surveys', function (Blueprint $table) {
+        Schema::create('survey_question_answers', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\User::class, 'user_id');
-            $table->string('title', 1000);
-            $table->string('slug', 1000);
-            $table->tinyInteger('status');
-            $table->text('description')->nullable();
+            $table->foreignIdFor(\App\Models\SurveyQuestion::class, 'survey_question_id');
+            $table->foreignIdFor(\App\Models\SurveyAnswer::class, 'survey_answer_id');
+            $table->text('answer');
             $table->timestamps();
-            $table->timestamps('expire_date')->nullable();
         });
     }
 
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('surveys');
+        Schema::dropIfExists('survey_question_answers');
     }
 };
