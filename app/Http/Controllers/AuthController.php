@@ -79,7 +79,7 @@ class AuthController extends Controller
 
         return response([
                 'success' => true
-            ] );
+            ]);
 
     }
 }
