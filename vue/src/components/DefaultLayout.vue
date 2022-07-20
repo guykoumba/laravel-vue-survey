@@ -132,6 +132,7 @@ export default {
         const router = useRouter();
 
         function logout() {
+            //sessionStorage.token = 
             store.commit('logout');
             router.push({
                 name: 'Login'

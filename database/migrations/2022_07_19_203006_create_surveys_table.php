@@ -21,7 +21,7 @@ return new class extends Migration
             $table->tinyInteger('status');
             $table->text('description')->nullable();
             $table->timestamps();
-            $table->timestamps('expire_date')->nullable();
+            $table->timestamp('expire_date')->nullable();
         });
     }
 
