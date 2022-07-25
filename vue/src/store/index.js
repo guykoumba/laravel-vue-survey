@@ -26,7 +26,7 @@ const tmpSurveys = [
             { uuid: "201c1ff5-23c9-42f9-bfb5-bbc850536440", text: "Georgia" },
             { uuid: "b5c09733-a49e-460a-ba8a-526863010729", text: "Germany" },
             { uuid: "2abf1cee-f5fb-427c-a220-b5d159ad6513", text: "India" },
-            { uuid: "8d14341b-ec2b-4924-9aea-bda6a53b51fc", text: "Inited kingdom" },
+            { uuid: "8d14341b-ec2b-4924-9aea-bda6a53b51fc", text: "United Kingdom" },
           ]
         }
       },
@@ -42,7 +42,7 @@ const tmpSurveys = [
             { uuid: "201c1ff5-23c9-42f9-bfb5-bbc850536440", text: "PHP" },
             { uuid: "b5c09733-a49e-460a-ba8a-526863010729", text: "HTML + CSS" },
             { uuid: "2abf1cee-f5fb-427c-a220-b5d159ad6513", text: "All of the above" },
-            { uuid: "8d14341b-ec2b-4924-9aea-bda6a53b51fc", text: "Everything Zura thikns will be good" },
+            { uuid: "8d14341b-ec2b-4924-9aea-bda6a53b51fc", text: "Everything Zura thinks will be good" },
           ]
         }
       },
@@ -159,7 +159,10 @@ const store = createStore({
       loading: false,
       data: {}
     },
-    surveys: [...tmpSurveys],
+    surveys: {
+      loading: false,
+      data: []
+    },
     questionTypes: ["text", "select", "radio", "checkbox", "textarea"],
   }, 
   getters: {},
@@ -207,6 +210,14 @@ const store = createStore({
         })
 
     },
+    getSurveys({ commit }, user) {
+      commit('setSurveysLoading', true);
+      return axiosClient.get('/survey').then((res) => {
+        commit('setSurveysLoading', false);
+        commit("setSurveys", res.data);
+        return res;
+      });
+    },
     login({ commit }, user) {
       return axiosClient.post('/login', user)
         .then(({ data }) => {
@@ -226,9 +237,15 @@ const store = createStore({
     setCurrentSurveyLoading: (state, loading) => {
       state.currentSurvey.loading = loading;      
     },
+    setSurveysLoading: (state, loading) => {
+      state.surveys.loading = loading;      
+    },
     setCurrentSurvey: (state, survey) => {
       state.currentSurvey.data = survey.data;
       
+    },
+    setSurveys: (state, surveys) => {
+      state.surveys.data = surveys.data;      
     },
     logout: state => {
       state.user.data = {};
