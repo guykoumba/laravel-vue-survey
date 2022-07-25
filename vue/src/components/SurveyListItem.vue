@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col py-4 px-6 shdow-md bg-white hover:bg-gray-50 h-[470px]"
+    class="flex flex-col py-4 px-6 shadow-md bg-white hover:bg-gray-50 h-[470px]"
   >
     <img :src="survey.image_url" alt="" class="w-full h-48 object-cover" />
     <h4 class="mt-4 text-lg font-bold">{{ survey.title }}</h4>
