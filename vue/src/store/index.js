@@ -21,12 +21,12 @@ const tmpSurveys = [
         question: "From which country are you",
         description: null,
         data: {
-          options: [
-            { uuid: "f8af96f2-1d80-4632-9e9e-b560670e52ea", text: "USA" },
-            { uuid: "201c1ff5-23c9-42f9-bfb5-bbc850536440", text: "Georgia" },
-            { uuid: "b5c09733-a49e-460a-ba8a-526863010729", text: "Germany" },
-            { uuid: "2abf1cee-f5fb-427c-a220-b5d159ad6513", text: "India" },
-            { uuid: "8d14341b-ec2b-4924-9aea-bda6a53b51fc", text: "United Kingdom" },
+          "options": [
+            { "uuid": "f8af96f2-1d80-4632-9e9e-b560670e52ea", "text": "USA" },
+            { "uuid": "201c1ff5-23c9-42f9-bfb5-bbc850536440", "text": "Georgia" },
+            { "uuid": "b5c09733-a49e-460a-ba8a-526863010729", "text": "Germany" },
+            { "uuid": "2abf1cee-f5fb-427c-a220-b5d159ad6513", "text": "India" },
+            { "uuid": "8d14341b-ec2b-4924-9aea-bda6a53b51fc", "text": "United Kingdom" },
           ]
         }
       },
@@ -37,12 +37,12 @@ const tmpSurveys = [
         description:
           "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sunt quod debitis esse. Omnis quibusdam perferendis nobis tempora nihil provident earum, ipsum cumque voluptatum. Quisquam commodi officiis obcaecati, incidunt placeat qui. ",
         data: {
-          options: [
-            { uuid: "f8af96f2-1d80-4632-9e9e-b560670e52ea", text: "JavaScript" },
-            { uuid: "201c1ff5-23c9-42f9-bfb5-bbc850536440", text: "PHP" },
-            { uuid: "b5c09733-a49e-460a-ba8a-526863010729", text: "HTML + CSS" },
-            { uuid: "2abf1cee-f5fb-427c-a220-b5d159ad6513", text: "All of the above" },
-            { uuid: "8d14341b-ec2b-4924-9aea-bda6a53b51fc", text: "Everything Zura thinks will be good" },
+          "options": [
+            { "uuid": "f8af96f2-1d80-4632-9e9e-b560670e52ea", "text": "JavaScript" },
+            { "uuid": "201c1ff5-23c9-42f9-bfb5-bbc850536440", "text": "PHP" },
+            { "uuid": "b5c09733-a49e-460a-ba8a-526863010729", "text": "HTML + CSS" },
+            { "uuid": "2abf1cee-f5fb-427c-a220-b5d159ad6513", "text": "All of the above" },
+            { "uuid": "8d14341b-ec2b-4924-9aea-bda6a53b51fc", "text": "Everything Zura thinks will be good" },
           ]
         }
       },
@@ -161,9 +161,15 @@ const store = createStore({
     },
     surveys: {
       loading: false,
+      links: [],
       data: []
     },
     questionTypes: ["text", "select", "radio", "checkbox", "textarea"],
+    notification: {
+      show: false,
+      type: null,
+      message: null
+    }
   }, 
   getters: {},
   actions: {
@@ -181,7 +187,7 @@ const store = createStore({
           throw err;
         })
     },
-    saveSurvey({ commit }, survey) {
+    saveSurvey({ commit }, survey) {      
       delete survey.image_url;
       let response;
       if (survey.id) {
@@ -202,6 +208,32 @@ const store = createStore({
     deleteSurvey({}, id) {
       return axiosClient.delete(`/survey/${id}`);
     },
+    getSurveys({ commit }, {url = null} = {}) {
+      url = url || '/survey';
+      commit('setSurveysLoading', true);
+      return axiosClient.get(url).then((res) => {
+        commit('setSurveysLoading', false);
+        commit("setSurveys", res.data);
+        return res;
+      });
+    },
+    getSurveyBySlug({ commit }, slug) {
+      commit("setCurrentSurveyLoading", true);
+      return axiosClient
+        .get(`/survey-by-slug/${slug}`)
+        .then((res) => {
+          commit("setCurrentSurvey", res.data);
+          commit("setCurrentSurveyLoading", false);
+          return res;
+        })
+        .catch((err) => {
+          commit("setCurrentSurveyLoading", false);
+          throw err;
+        });
+    },
+    saveSurveyAnswer({commit}, {surveyId, answers}) {
+      return axiosClient.post(`/survey/${surveyId}/answer`, {answers});
+    },
     register({ commit }, user) {
       return axiosClient.post('/register', user)
         .then(({ data }) => {
@@ -209,14 +241,6 @@ const store = createStore({
           return data;
         })
 
-    },
-    getSurveys({ commit }, user) {
-      commit('setSurveysLoading', true);
-      return axiosClient.get('/survey').then((res) => {
-        commit('setSurveysLoading', false);
-        commit("setSurveys", res.data);
-        return res;
-      });
     },
     login({ commit }, user) {
       return axiosClient.post('/login', user)
@@ -245,7 +269,8 @@ const store = createStore({
       
     },
     setSurveys: (state, surveys) => {
-      state.surveys.data = surveys.data;      
+      state.surveys.data = surveys.data;
+      state.surveys.links = surveys.meta.links;
     },
     logout: state => {
       state.user.data = {};
@@ -255,6 +280,14 @@ const store = createStore({
       state.user.token = userData.token;
       state.user.data = userData.user;
       sessionStorage.setItem('TOKEN', userData.token);
+    },
+    notify: (state, {message, type}) => {
+      state.notification.show = true;      
+      state.notification.type = type;
+      state.notification.message = message;
+      setTimeout(()=> {
+        state.notification.show  =false
+      }, 3000);
     }
   }, modules: {}
 })
