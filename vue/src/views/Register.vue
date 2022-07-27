@@ -68,6 +68,7 @@
 <script setup>
 import store from "../store";
 import { useRouter } from "vue-router";
+import {ref } from 'vue';
 
 const router = useRouter();
 const user = {
@@ -77,6 +78,8 @@ const user = {
     password_confirmation: ''
 }
 
+const errors = ref({});
+
 function register(ev) {
     ev.preventDefault();
     store
@@ -85,6 +88,11 @@ function register(ev) {
             router.push({
                 name: 'Dashboard'
             })
+        })
+        .catch(err => {
+            if(err.response.status === 422) {
+                errors.value = err.response.data.errors;
+            }
         })
 
 }

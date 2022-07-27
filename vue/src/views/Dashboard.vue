@@ -64,12 +64,20 @@
         />
         <h3 class="font-bold text-xl mb-3">{{ data.latestSurvey.title }}</h3>
         <div class="flex justify-between text-sm mb-1">
-          <div>Upload Date:</div>
+          <div>Create Date:</div>
           <div>{{ data.latestSurvey.created_at }}</div>
+        </div>
+        <div class="flex justify-between text-sm mb-1">
+          <div>Exirpire Date:</div>
+          <div>{{ data.latestSurvey.expire_date }}</div>
+        </div>
+        <div class="flex justify-between text-sm mb-1">
+          <div>Questions:</div>
+          <div>{{ data.latestSurvey.questions }}</div>
         </div>
         <div class="flex justify-between text-sm mb-3">
           <div>Answers:</div>
-          <div>{{ data.totalAnswers }}</div>
+          <div>{{ data.latestSurvey.answers }}</div>
         </div>
         <div class="flex justify-between">
           <router-link
@@ -151,9 +159,22 @@
           <a
             href="javascript:void(0)"
             class="text-sm text-blue-500 hover:decoration-blue-500"
-            >View all</a
           >
+            View all
+          </a>
         </div>
+        <a
+          href="#"
+          v-for="answer of data.latestAnswers"
+          :key="answer.id"
+          class="block p-2 hover:bg-gray-100/90"
+        >
+          <div class="font-semibold">{{ answer.survey.title }}</div>
+          <small>
+            Answer Made at:
+            <i class="font-semibold">{{ answer.end_date }}</i>
+          </small>
+        </a>
       </div>
     </div>
   </PageComponent>
