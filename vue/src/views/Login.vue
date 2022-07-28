@@ -24,17 +24,7 @@
       {{ errorMsg }}
       <span
         @click="errorMsg = ''"
-        class="
-          w-8
-          h-8
-          flex
-          items-center
-          justify-center
-          rounded-full
-          transition-colors
-          cursor-pointer
-          hover:bg-[rgba(0,0,0,0.2)]
-        "
+        class="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer hover:bg-[rgba(0,0,0,0.2)]"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -42,11 +32,11 @@
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-          stroke-width="2"
         >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
+            stroke-width="2"
             d="M6 18L18 6M6 6l12 12"
           />
         </svg>
@@ -61,27 +51,10 @@
           name="email"
           type="email"
           autocomplete="email"
-          required
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-full
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            rounded-t-md
-            focus:outline-none
-            focus:ring-indigo-500
-            focus:border-indigo-500
-            focus:z-10
-            sm:text-sm
-          "
-          placeholder="Email address"
+          required=""
           v-model="user.email"
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+          placeholder="Email address"
         />
       </div>
       <div>
@@ -91,27 +64,10 @@
           name="password"
           type="password"
           autocomplete="current-password"
-          required
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-full
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            rounded-b-md
-            focus:outline-none
-            focus:ring-indigo-500
-            focus:border-indigo-500
-            focus:z-10
-            sm:text-sm
-          "
-          placeholder="Password"
+          required=""
           v-model="user.password"
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+          placeholder="Password"
         />
       </div>
     </div>
@@ -123,14 +79,7 @@
           name="remember-me"
           type="checkbox"
           v-model="user.remember"
-          class="
-            h-4
-            w-4
-            text-indigo-600
-            focus:ring-indigo-500
-            border-gray-300
-            rounded
-          "
+          class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
         />
         <label for="remember-me" class="ml-2 block text-sm text-gray-900">
           Remember me
@@ -142,33 +91,13 @@
       <button
         type="submit"
         :disabled="loading"
-        class="
-          group
-          relative
-          w-full
-          flex
-          justify-center
-          py-2
-          px-4
-          border border-transparent
-          text-sm
-          font-medium
-          rounded-md
-          text-white
-          bg-indigo-600
-          hover:bg-indigo-700
-          focus:outline-none
-          focus:ring-2
-          focus:ring-offset-2
-          focus:ring-indigo-500
-        "
+        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         :class="{
           'cursor-not-allowed': loading,
           'hover:bg-indigo-500': loading,
         }"
       >
         <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-          <!-- Heroicon name: solid/lock-closed -->
           <LockClosedIcon
             class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
             aria-hidden="true"
@@ -176,7 +105,7 @@
         </span>
         <svg
           v-if="loading"
-          class="animate-spin ml-1 mr-3 h-5 w-5 text-white"
+          class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -201,24 +130,18 @@
   </form>
 </template>
 
-<style scoped>
-.read-the-docs {
-  color: #888;
-}
-</style>
-
 <script setup>
+import { LockClosedIcon } from "@heroicons/vue/solid";
 import store from "../store";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
-import { LockClosedIcon } from "@heroicons/vue/solid";
 import Alert from "../components/Alert.vue";
 
 const router = useRouter();
+
 const user = {
   email: "",
   password: "",
-  remember: false,
 };
 let loading = ref(false);
 let errorMsg = ref("");
@@ -237,7 +160,7 @@ function login(ev) {
     })
     .catch((err) => {
       loading.value = false;
-      errorMsg.value = err;//.response.data.error;
+      errorMsg.value = err.response.data.error;
     });
 }
 </script>

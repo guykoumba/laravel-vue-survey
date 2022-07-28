@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="errorMsg"
     class="
       flex
       items-center

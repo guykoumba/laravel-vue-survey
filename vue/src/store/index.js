@@ -272,7 +272,15 @@ const store = createStore({
           commit('logout');
           return response;
         })
-    }
+    },
+    getUser({commit}) {
+      return axiosClient.get('/user')
+      .then(res => {
+        console.log(res);
+        commit('setUser', res.data)
+      })
+    },
+
   },
   mutations: {
     dashboardLoading: (state, loading) => {
