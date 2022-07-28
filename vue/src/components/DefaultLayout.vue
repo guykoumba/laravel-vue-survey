@@ -222,8 +222,7 @@ export default {
       });
     }
 
-    store.dispatch("getUser");
-
+    store.dispatch("getUser");    
     return {
       user: computed(() => store.state.user.data),
       navigation,

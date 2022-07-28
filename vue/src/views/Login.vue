@@ -153,7 +153,7 @@ function login(ev) {
   store
     .dispatch("login", user)
     .then(() => {
-      loading.value = false;
+      loading.value = false;      
       router.push({
         name: "Dashboard",
       });
